@@ -1,0 +1,326 @@
+/* Admin User Detail - Prompt List View */
+.admin-user-detail {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+  padding: 2rem;
+}
+
+/* Header */
+.detail-header {
+  max-width: 1400px;
+  margin: 0 auto 2rem;
+}
+
+.back-button {
+  padding: 0.75rem 1.5rem;
+  background: white;
+  color: #667eea;
+  border: 2px solid #667eea;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.back-button:hover {
+  background: #667eea;
+  color: white;
+  transform: translateX(-4px);
+}
+
+/* User Info Card */
+.user-info-card {
+  max-width: 1400px;
+  margin: 0 auto 2rem;
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.user-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.user-avatar-large {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.user-details h1 {
+  margin: 0;
+  font-size: 2rem;
+  color: #2d3748;
+}
+
+.user-id {
+  margin: 0.5rem 0 0 0;
+  color: #718096;
+  font-size: 1rem;
+}
+
+.user-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.stat-box {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, #667eea10 0%, #764ba210 100%);
+  border-radius: 10px;
+  border: 1px solid #667eea20;
+}
+
+.stat-box .stat-icon {
+  font-size: 2rem;
+}
+
+.stat-box .stat-content {
+  flex: 1;
+}
+
+.stat-box .stat-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #667eea;
+  margin: 0;
+}
+
+.stat-box .stat-label {
+  font-size: 0.85rem;
+  color: #718096;
+  margin-top: 0.25rem;
+}
+
+/* Prompts Section */
+.prompts-section {
+  max-width: 1400px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.section-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #2d3748;
+}
+
+.sort-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.sort-controls label {
+  color: #718096;
+  font-size: 0.9rem;
+}
+
+.sort-controls select {
+  padding: 0.5rem 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 6px;
+  background: white;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.sort-controls select:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+/* Prompts Table */
+.prompts-table-container {
+  overflow-x: auto;
+}
+
+.prompts-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.prompts-table thead {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.prompts-table th {
+  padding: 1rem;
+  text-align: left;
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.prompts-table tbody tr {
+  border-bottom: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.prompts-table tbody tr:hover {
+  background: #667eea10;
+}
+
+.prompts-table td {
+  padding: 1rem;
+  color: #2d3748;
+}
+
+.prompt-text {
+  max-width: 400px;
+}
+
+.task-preview {
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.date-cell {
+  min-width: 120px;
+}
+
+.date-display {
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.time-display {
+  font-size: 0.85rem;
+  color: #718096;
+  margin-top: 0.25rem;
+}
+
+.score-badge {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.score-badge.excellent {
+  background: #10b98120;
+  color: #10b981;
+}
+
+.score-badge.good {
+  background: #3b82f620;
+  color: #3b82f6;
+}
+
+.score-badge.average {
+  background: #f59e0b20;
+  color: #f59e0b;
+}
+
+.score-badge.poor {
+  background: #ef444420;
+  color: #ef4444;
+}
+
+.loops-badge {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  background: #667eea20;
+  color: #667eea;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.view-btn {
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.view-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+/* Loading & Empty States */
+.loading-state, .empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  margin: 0 auto 1rem;
+  border: 4px solid #e2e8f0;
+  border-top-color: #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.empty-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.empty-state p {
+  color: #718096;
+  font-size: 1.1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .admin-user-detail {
+    padding: 1rem;
+  }
+  
+  .user-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .prompts-table {
+    font-size: 0.85rem;
+  }
+  
+  .prompts-table th,
+  .prompts-table td {
+    padding: 0.75rem 0.5rem;
+  }
+  
+  .prompt-text {
+    max-width: 200px;
+  }
+}
