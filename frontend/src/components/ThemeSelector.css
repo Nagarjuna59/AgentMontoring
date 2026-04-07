@@ -1,0 +1,65 @@
+.global-theme-dock {
+  position: fixed;
+  right: 16px;
+  top: 14px;
+  z-index: 1200;
+}
+
+.theme-selector {
+  display: flex;
+  gap: 8px;
+  padding: 6px;
+  border-radius: 12px;
+  background: var(--dock-bg);
+  border: 1px solid var(--dock-border);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(6px);
+}
+
+.theme-chip {
+  border: 1px solid transparent;
+  background: var(--chip-bg);
+  color: var(--chip-text);
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1.2;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.theme-chip.active {
+  border-color: var(--accent);
+  background: var(--chip-bg-active);
+}
+
+.chip-badges {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.chip-badges i {
+  font-style: normal;
+  font-size: 10px;
+  border-radius: 999px;
+  padding: 1px 5px;
+  color: #101015;
+}
+
+.b-easy { background: #22c55e; }
+.b-medium { background: #f59e0b; }
+.b-hard { background: #ef4444; }
+
+@media (max-width: 900px) {
+  .global-theme-dock {
+    top: auto;
+    bottom: 12px;
+    right: 12px;
+  }
+
+  .theme-selector {
+    flex-direction: column;
+  }
+}

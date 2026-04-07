@@ -9,6 +9,8 @@ import AdminUserDetail from './pages/AdminUserDetail';
 import AdminPromptDetail from './pages/AdminPromptDetail';
 import AdminAnalytics from './pages/AdminAnalytics';
 import AnalyticsPage from './pages/AnalyticsPage';
+import ThemeSelector from './components/ThemeSelector';
+import { ThemeProvider } from './context/ThemeContext';
 
 function App() {
   const [user, setUser] = React.useState(null);
@@ -33,49 +35,54 @@ function App() {
   };
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={
-          user ? <Navigate to={user.role === 'admin' ? '/admin-dashboard' : '/dashboard'} /> : 
-          <Login onLogin={handleLogin} />
-        } />
-        <Route path="/register" element={
-          user ? <Navigate to={user.role === 'admin' ? '/admin-dashboard' : '/dashboard'} /> : 
-          <Register onLogin={handleLogin} />
-        } />
-        <Route path="/dashboard" element={
-          user && user.role === 'user' ? 
-          <UserDashboardSimple user={user} onLogout={handleLogout} /> : 
-          <Navigate to="/login" />
-        } />
-        <Route path="/admin-dashboard" element={
-          user && user.role === 'admin' ? 
-          <AdminDashboard user={user} onLogout={handleLogout} /> : 
-          <Navigate to="/login" />
-        } />
-        <Route path="/admin/user/:userId" element={
-          user && user.role === 'admin' ? 
-          <AdminUserDetail /> : 
-          <Navigate to="/login" />
-        } />
-        <Route path="/admin/user/:userId/prompt/:promptId" element={
-          user && user.role === 'admin' ? 
-          <AdminPromptDetail /> : 
-          <Navigate to="/login" />
-        } />
-        <Route path="/admin/analytics" element={
-          user && user.role === 'admin' ? 
-          <AdminAnalytics /> : 
-          <Navigate to="/login" />
-        } />
-        <Route path="/analytics/:runId" element={
-          user ? 
-          <AnalyticsPage user={user} onLogout={handleLogout} /> : 
-          <Navigate to="/login" />
-        } />
-      </Routes>
-    </Router>
+    <ThemeProvider>
+      <Router>
+        <div className="global-theme-dock">
+          <ThemeSelector />
+        </div>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={
+            user ? <Navigate to={user.role === 'admin' ? '/admin-dashboard' : '/dashboard'} /> :
+            <Login onLogin={handleLogin} />
+          } />
+          <Route path="/register" element={
+            user ? <Navigate to={user.role === 'admin' ? '/admin-dashboard' : '/dashboard'} /> :
+            <Register onLogin={handleLogin} />
+          } />
+          <Route path="/dashboard" element={
+            user && user.role === 'user' ?
+            <UserDashboardSimple user={user} onLogout={handleLogout} /> :
+            <Navigate to="/login" />
+          } />
+          <Route path="/admin-dashboard" element={
+            user && user.role === 'admin' ?
+            <AdminDashboard user={user} onLogout={handleLogout} /> :
+            <Navigate to="/login" />
+          } />
+          <Route path="/admin/user/:userId" element={
+            user && user.role === 'admin' ?
+            <AdminUserDetail /> :
+            <Navigate to="/login" />
+          } />
+          <Route path="/admin/user/:userId/prompt/:promptId" element={
+            user && user.role === 'admin' ?
+            <AdminPromptDetail /> :
+            <Navigate to="/login" />
+          } />
+          <Route path="/admin/analytics" element={
+            user && user.role === 'admin' ?
+            <AdminAnalytics /> :
+            <Navigate to="/login" />
+          } />
+          <Route path="/analytics/:runId" element={
+            user ?
+            <AnalyticsPage user={user} onLogout={handleLogout} /> :
+            <Navigate to="/login" />
+          } />
+        </Routes>
+      </Router>
+    </ThemeProvider>
   );
 }
 

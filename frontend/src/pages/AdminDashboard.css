@@ -1,13 +1,13 @@
 /* Admin Dashboard - Modern Card-based Layout */
 .admin-dashboard {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 10%, transparent) 0%, color-mix(in srgb, var(--accent-2) 10%, transparent) 100%);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
 }
 
 /* Header */
 .admin-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
   padding: 1.5rem 2rem;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
@@ -42,7 +42,7 @@
 .analytics-btn {
   padding: 0.75rem 1.5rem;
   background: rgba(255,255,255,0.95);
-  color: #667eea;
+  color: var(--accent);
   border: 2px solid rgba(255,255,255,0.3);
   border-radius: 8px;
   font-weight: 600;
@@ -141,7 +141,7 @@
 .stat-value {
   font-size: 2rem;
   font-weight: 700;
-  color: #667eea;
+  color: var(--accent);
   margin: 0;
 }
 
@@ -182,8 +182,8 @@
 
 .user-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.25);
-  border-color: #667eea;
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--accent) 25%, transparent);
+  border-color: var(--accent);
 }
 
 .user-card-header {
@@ -198,7 +198,7 @@
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
   color: white;
   display: flex;
   align-items: center;
@@ -259,7 +259,7 @@
 }
 
 .stat-item .stat-value.score {
-  color: #667eea;
+  color: var(--accent);
   font-size: 1.25rem;
 }
 
@@ -272,7 +272,7 @@
 .view-details-btn {
   width: 100%;
   padding: 0.75rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
   color: white;
   border: none;
   border-radius: 8px;

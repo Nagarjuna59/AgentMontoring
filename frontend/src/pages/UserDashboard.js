@@ -101,7 +101,7 @@ function UserDashboard({ user, onLogout }) {
     setLoading(true);
 
     // Add loading message
-    setMessages(prev => [...prev, { type: 'bot', text: 'Generating initial code...', isLoading: true }] );
+    setMessages(prev => [...prev, { type: 'bot', text: '🔄 Stage 1/3: Generating brute force solution...', isLoading: true }] );
 
     try {
   // Start the run and get initial code immediately (pass use_full_mas flag)
@@ -111,27 +111,48 @@ function UserDashboard({ user, onLogout }) {
 
       // Remove loading message and show initial code
   setMessages(prev => prev.filter(m => !m.isLoading));
-  // Show initial code inline as a chat-like message
-  setMessages(prev => [...prev, { type: 'bot', text: '✅ Initial code (fast):', result: { code: initial_code, predicted_score: 0.0 } }]);
 
       setCurrentResult({ code: initial_code, predicted_score: 0.0, run_id: runId });
       setInitialResult({ code: initial_code, predicted_score: 0.0, run_id: runId });
 
-      // Poll for enhanced result
+      // Poll for progressive results (brute → semi → optimal)
       let attempts = 0;
-      const maxAttempts = 40; // up to ~2 minutes
-      const pollInterval = 3000;
+      const maxAttempts = 40; // up to ~3 minutes for 3 stages
+      const pollInterval = 5000; // Poll every 5 seconds to reduce server load
 
       const poll = async () => {
         try {
           const runData = await getRun(runId);
-          if (runData && runData.monitor_data) {
-            // Enhancement complete
-            setMessages(prev => [...prev, { type: 'bot', text: `🔄 Enhancement complete. Predicted score: ${runData.predicted_score.toFixed(2)}`, result: runData }]);
+          const status = runData.status || runData.progress || 'generating';
+          
+          // Update progress based on stage
+          if (status === 'brute_ready' || status === 'generating_optimal') {
+            setMessages(prev => {
+              const filtered = prev.filter(m => !m.isLoading);
+              return [...filtered, { type: 'bot', text: '✅ Brute force ready! ⏳ Stage 2/2: Generating optimal...', result: { code: runData.brute_code || runData.initial_code, predicted_score: 0.55 }, isLoading: true }];
+            });
+          }
+          
+          if (status === 'done' && runData.monitor_data) {
+            // All stages complete
+            setMessages(prev => {
+              const filtered = prev.filter(m => !m.isLoading);
+              return [...filtered, { type: 'bot', text: `✨ All stages complete! Brute → Optimal. Final score: ${runData.predicted_score?.toFixed(2)}`, result: runData }];
+            });
             setCurrentResult(runData);
             setShowEnhancedCode(true);
             setShowDetailsPanel(true);
             loadRecentRuns();
+            setLoading(false);
+            return;
+          }
+          
+          // Also check for failure
+          if (status === 'failed') {
+            setMessages(prev => {
+              const filtered = prev.filter(m => !m.isLoading);
+              return [...filtered, { type: 'bot', text: `❌ Generation failed: ${runData.status_message || 'Unknown error'}`, isError: true }];
+            });
             setLoading(false);
             return;
           }

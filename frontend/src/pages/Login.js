@@ -62,8 +62,8 @@ function Login({ onLogin }) {
           </button>
         </form>
         
-        <p style={{textAlign: 'center', marginTop: '1rem', color: '#666'}}>
-          Don't have an account? <span style={{color: '#667eea', cursor: 'pointer'}} onClick={() => navigate('/register')}>Register here</span>
+        <p style={{textAlign: 'center', marginTop: '1rem', color: 'var(--text-soft)'}}>
+          Don't have an account? <span style={{color: 'var(--accent)', cursor: 'pointer'}} onClick={() => navigate('/register')}>Register here</span>
         </p>
         
         <button className="back-button" onClick={() => navigate('/')}>

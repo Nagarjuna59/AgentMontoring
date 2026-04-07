@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { register } from '../api';
 import './Login.css';
 
 function Register({ onLogin }) {
@@ -28,11 +28,8 @@ function Register({ onLogin }) {
     setLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:8080/api/register', {
-        username,
-        password
-      });
-      onLogin(response.data);
+      const data = await register(username, password);
+      onLogin(data);
       navigate('/dashboard');
     } catch (err) {
       setError(err.response?.data?.detail || 'Registration failed');
@@ -88,8 +85,8 @@ function Register({ onLogin }) {
           </button>
         </form>
         
-        <p style={{textAlign: 'center', marginTop: '1rem', color: '#666'}}>
-          Already have an account? <span style={{color: '#667eea', cursor: 'pointer'}} onClick={() => navigate('/login')}>Login here</span>
+        <p style={{textAlign: 'center', marginTop: '1rem', color: 'var(--text-soft)'}}>
+          Already have an account? <span style={{color: 'var(--accent)', cursor: 'pointer'}} onClick={() => navigate('/login')}>Login here</span>
         </p>
         
         <button className="back-button" onClick={() => navigate('/')}>

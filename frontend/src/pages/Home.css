@@ -3,7 +3,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: radial-gradient(circle at 20% 15%, rgba(249, 115, 22, 0.18), transparent 35%),
+    linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
   padding: 20px;
 }
 
@@ -57,8 +58,8 @@
 }
 
 .cta-button {
-  background: white;
-  color: #667eea;
+  background: var(--surface);
+  color: var(--accent);
   border: none;
   padding: 1rem 3rem;
   font-size: 1.2rem;

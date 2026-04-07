@@ -3,12 +3,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: radial-gradient(circle at 10% 20%, rgba(249, 115, 22, 0.18), transparent 30%),
+    linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
   padding: 20px;
 }
 
 .login-box {
-  background: white;
+  background: var(--surface);
   padding: 3rem;
   border-radius: 15px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
@@ -18,14 +19,14 @@
 
 .login-box h2 {
   text-align: center;
-  color: #333;
+  color: var(--text-main);
   margin-bottom: 0.5rem;
   font-size: 2rem;
 }
 
 .login-subtitle {
   text-align: center;
-  color: #666;
+  color: var(--text-soft);
   margin-bottom: 2rem;
   font-size: 0.95rem;
 }
@@ -46,7 +47,7 @@
 .form-group label {
   display: block;
   margin-bottom: 0.5rem;
-  color: #333;
+  color: var(--text-main);
   font-weight: 500;
 }
 
@@ -61,13 +62,13 @@
 
 .form-group input:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: var(--accent);
 }
 
 button[type="submit"] {
   width: 100%;
   padding: 1rem;
-  background: #667eea;
+  background: var(--accent);
   color: white;
   border: none;
   border-radius: 8px;
@@ -105,8 +106,8 @@ button[type="submit"]:disabled {
   margin-top: 1rem;
   padding: 0.75rem;
   background: transparent;
-  color: #667eea;
-  border: 2px solid #667eea;
+  color: var(--accent);
+  border: 2px solid var(--accent);
   border-radius: 8px;
   font-size: 1rem;
   font-weight: 500;
@@ -115,6 +116,6 @@ button[type="submit"]:disabled {
 }
 
 .back-button:hover {
-  background: #667eea;
+  background: var(--accent);
   color: white;
 }

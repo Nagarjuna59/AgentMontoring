@@ -90,8 +90,8 @@ class EnhancedAgentMonitor:
         """Create a Llama function using Ollama API"""
         def llama_call(prompt):
             try:
-                ollama_url = os.getenv('OLLAMA_BASE_URL', 'https://k7xc1qwz-11434.inc1.devtunnels.ms')
-                llama_model = os.getenv('LLAMA_MODEL', 'qwen3:8b')
+                ollama_url = os.getenv('OLLAMA_BASE_URL', 'http://localhost:11434')
+                llama_model = os.getenv('LLAMA_MODEL', 'qwen2.5-coder:3b')
                 
                 url = f"{ollama_url}/api/generate"
                 payload = {

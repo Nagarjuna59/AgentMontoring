@@ -1,31 +1,34 @@
 .analytics-page-container {
   width: 100%;
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 20px;
+  background: var(--app-bg);
+  padding: 20px 24px;
+  color: var(--text-main);
 }
 
 .page-header {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   margin-bottom: 20px;
 }
 
 .logout-btn {
   padding: 10px 20px;
-  background: white;
-  border: none;
-  border-radius: 6px;
+  background: var(--surface);
+  border: 1px solid color-mix(in srgb, var(--text-main) 25%, transparent);
+  border-radius: 8px;
   font-weight: 600;
-  color: #667eea;
+  color: var(--text-main);
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease;
+  box-shadow: 0 8px 30px rgba(14, 20, 35, 0.25);
 }
 
 .logout-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transform: translateY(-1px);
+  background: #2b3a5b;
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.35);
 }
 
 .loading-spinner {
@@ -73,7 +76,7 @@
 
 .retry-btn {
   padding: 10px 24px;
-  background: #667eea;
+  background: var(--accent);
   color: white;
   border: none;
   border-radius: 6px;
@@ -83,7 +86,7 @@
 }
 
 .retry-btn:hover {
-  background: #764ba2;
+  background: var(--accent-2);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
