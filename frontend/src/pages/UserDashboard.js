@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { runMAS, runMASStart, getUserRuns, getRun } from '../api';
+import { useTheme } from '../context/ThemeContext';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
 import './UserDashboard.css';
 
 function UserDashboard({ user, onLogout }) {
+  const { darkMode, toggleDarkMode } = useTheme();
   const [messages, setMessages] = useState([
     { type: 'bot', text: 'Hello! I\'m your AgentMonitor assistant. Describe a coding task and I\'ll run the Multi-Agent System to help you!' }
   ]);
@@ -124,6 +126,13 @@ function UserDashboard({ user, onLogout }) {
         try {
           const runData = await getRun(runId);
           const status = runData.status || runData.progress || 'generating';
+          const statusMsg = runData.status_message || 'Generating solution...';
+          
+          // Update message with current status
+          setMessages(prev => {
+            const filtered = prev.filter(m => !m.isLoading);
+            return [...filtered, { type: 'bot', text: statusMsg, isLoading: true, progress: status }];
+          });
           
           // Update progress based on stage
           if (status === 'brute_ready' || status === 'generating_optimal') {
@@ -137,7 +146,7 @@ function UserDashboard({ user, onLogout }) {
             // All stages complete
             setMessages(prev => {
               const filtered = prev.filter(m => !m.isLoading);
-              return [...filtered, { type: 'bot', text: `✨ All stages complete! Brute → Optimal. Final score: ${runData.predicted_score?.toFixed(2)}`, result: runData }];
+              return [...filtered, { type: 'bot', text: `✨ Complete! Both solutions generated. Predicted score: ${runData.predicted_score?.toFixed(2)}/1.0`, result: runData }];
             });
             setCurrentResult(runData);
             setShowEnhancedCode(true);
@@ -245,6 +254,13 @@ function UserDashboard({ user, onLogout }) {
         </div>
         <div className="user-info">
           <span>Welcome, {user.username}</span>
+          <button 
+            onClick={toggleDarkMode} 
+            className="theme-toggle-btn"
+            title={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+          >
+            {darkMode ? '☀️' : '🌙'}
+          </button>
           <button onClick={onLogout} className="logout-btn">Logout</button>
         </div>
       </header>
@@ -291,7 +307,18 @@ function UserDashboard({ user, onLogout }) {
               {messages.map((msg, idx) => (
                 <div key={idx} className={`message ${msg.type}`}>
                   <div className="message-bubble">
-                  {msg.isLoading && <div className="loading-dots"><span></span><span></span><span></span></div>}
+                  {msg.isLoading && (
+                    <>
+                      <p>{msg.text}</p>
+                      <div className="loading-dots"><span></span><span></span><span></span></div>
+                      <div className="progress-bar">
+                        <div className="progress-track">
+                          <div className="progress-fill" style={{ width: '60%' }}></div>
+                        </div>
+                        <div className="progress-percentage">60%</div>
+                      </div>
+                    </>
+                  )}
                   {!msg.isLoading && <p>{msg.text}</p>}
                   {msg.result && (
                     <div className="inline-result">
@@ -375,30 +402,51 @@ function UserDashboard({ user, onLogout }) {
           
           {currentResult ? (
             <>
-              {/* Code Section - Simple, clean code display */}
+              {/* Code Section - Two Stage Display */}
               <div className="code-section">
-                {showEnhancedCode && initialResult ? (
+                {currentResult.brute_code && currentResult.optimal_code ? (
                   <div className="code-comparison">
-                    <div className="code-column">
-                      <h3>📝 Initial Code (Score: {initialResult.predicted_score.toFixed(2)})</h3>
+                    {/* Stage 1: Brute Force */}
+                    <div className="code-column brute-force">
+                      <div className="stage-header orange">
+                        <span className="stage-icon">⚡</span>
+                        <h3>Stage 1: Brute Force</h3>
+                      </div>
                       <div className="code-display white">
-                        <pre>{initialResult.code || initialResult.result || 'No code'}</pre>
+                        <pre>{currentResult.brute_code}</pre>
+                      </div>
+                      <div className="code-footer">
+                        <div className="explanation-badge">💡 {currentResult.brute_explanation || 'Brute force: O(n²) simple approach prioritizing correctness.'}</div>
                       </div>
                     </div>
-                    <div className="code-column">
-                      <h3 className="enhanced-title">✨ Enhanced Code (Score: {currentResult.predicted_score.toFixed(2)})</h3>
-                      <div className="code-display white enhanced">
-                        <pre>{currentResult.code || currentResult.result || 'No code'}</pre>
+
+                    {/* Stage 2: Optimal */}
+                    <div className="code-column optimal">
+                      <div className="stage-header green">
+                        <span className="stage-icon">⚡</span>
+                        <h3>Stage 2: Optimal</h3>
+                      </div>
+                      <div className="code-display white">
+                        <pre>{currentResult.optimal_code}</pre>
+                      </div>
+                      <div className="code-footer">
+                        <div className="explanation-badge">💡 {currentResult.optimal_explanation || 'Optimal: Best time and space complexity with efficient algorithms.'}</div>
                       </div>
                     </div>
                   </div>
-                ) : (
+                ) : currentResult.code ? (
                   <>
-                    <h3>💻 Complete Generated Code</h3>
+                    <h3>💻 Generated Code</h3>
                     <div className="code-display white">
                       <pre>{currentResult.code || currentResult.result || 'No code generated'}</pre>
                     </div>
                   </>
+                ) : (
+                  <div className="empty-state">
+                    <div className="empty-icon">⏳</div>
+                    <h3>Loading...</h3>
+                    <p>Generating solutions...</p>
+                  </div>
                 )}
               </div>
 

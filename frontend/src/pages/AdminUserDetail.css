@@ -1,7 +1,7 @@
 /* Admin User Detail - Prompt List View */
 .admin-user-detail {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+  background: color-mix(in srgb, var(--accent) 5%, var(--app-bg) 95%);
   padding: 2rem;
 }
 
@@ -13,9 +13,9 @@
 
 .back-button {
   padding: 0.75rem 1.5rem;
-  background: white;
-  color: #667eea;
-  border: 2px solid #667eea;
+  background: var(--surface);
+  color: var(--accent);
+  border: 2px solid var(--accent);
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
@@ -23,7 +23,7 @@
 }
 
 .back-button:hover {
-  background: #667eea;
+  background: var(--accent);
   color: white;
   transform: translateX(-4px);
 }
@@ -32,10 +32,10 @@
 .user-info-card {
   max-width: 1400px;
   margin: 0 auto 2rem;
-  background: white;
+  background: var(--surface);
   border-radius: 12px;
   padding: 2rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px var(--shadow-sm);
 }
 
 .user-header {

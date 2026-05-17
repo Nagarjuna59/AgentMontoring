@@ -8,17 +8,76 @@
 
 :root {
   --font-ui: "Sora", "Segoe UI", sans-serif;
-  --app-bg: #f5f7ff;
-  --surface: #ffffff;
-  --text-main: #1a1f36;
-  --text-soft: #5f6984;
+  --app-bg: #ffffff;
+  --surface: #f5f5f5;
+  --text-main: #1a1a1a;
+  --text-soft: #666666;
+  --text-softer: #999999;
+  --border-color: #ddd;
+  --border-light: #eee;
   --accent: #4f46e5;
   --accent-2: #f97316;
-  --dock-bg: rgba(7, 10, 26, 0.7);
-  --dock-border: rgba(255, 255, 255, 0.2);
-  --chip-bg: rgba(255, 255, 255, 0.1);
-  --chip-bg-active: rgba(79, 70, 229, 0.35);
-  --chip-text: #f9fafb;
+  --accent-hover: #5568d3;
+  --error-bg: #fee;
+  --error-text: #c33;
+  --dock-bg: rgba(255, 255, 255, 0.95);
+  --dock-border: rgba(79, 70, 229, 0.2);
+  --chip-bg: rgba(99, 102, 241, 0.08);
+  --chip-bg-active: rgba(79, 70, 229, 0.15);
+  --chip-text: #1a1a1a;
+  --shadow-sm: rgba(0, 0, 0, 0.1);
+  --shadow-md: rgba(0, 0, 0, 0.2);
+  --shadow-lg: rgba(0, 0, 0, 0.3);
+}
+
+/* Dark mode CSS variables */
+html[data-mode="dark"],
+:root[data-mode="dark"] {
+  --app-bg: #1a1a1a;
+  --surface: #2d2d2d;
+  --text-main: #ffffff;
+  --text-soft: #b0b0b0;
+  --text-softer: #808080;
+  --border-color: #444;
+  --border-light: #333;
+  --accent: #7c3aed;
+  --accent-2: #f97316;
+  --accent-hover: #9333ea;
+  --error-bg: #3d1a1a;
+  --error-text: #ff9999;
+  --dock-bg: rgba(26, 26, 26, 0.9);
+  --dock-border: rgba(255, 255, 255, 0.1);
+  --chip-bg: rgba(255, 255, 255, 0.05);
+  --chip-bg-active: rgba(124, 58, 237, 0.3);
+  --chip-text: #ffffff;
+  --shadow-sm: rgba(0, 0, 0, 0.3);
+  --shadow-md: rgba(0, 0, 0, 0.4);
+  --shadow-lg: rgba(0, 0, 0, 0.5);
+}
+
+/* Light mode CSS variables */
+html[data-mode="light"],
+:root[data-mode="light"] {
+  --app-bg: #ffffff;
+  --surface: #f5f5f5;
+  --text-main: #1a1a1a;
+  --text-soft: #666666;
+  --text-softer: #999999;
+  --border-color: #ddd;
+  --border-light: #eee;
+  --accent: #4f46e5;
+  --accent-2: #f97316;
+  --accent-hover: #5568d3;
+  --error-bg: #fee;
+  --error-text: #c33;
+  --dock-bg: rgba(255, 255, 255, 0.95);
+  --dock-border: rgba(79, 70, 229, 0.2);
+  --chip-bg: rgba(99, 102, 241, 0.08);
+  --chip-bg-active: rgba(79, 70, 229, 0.15);
+  --chip-text: #1a1a1a;
+  --shadow-sm: rgba(0, 0, 0, 0.1);
+  --shadow-md: rgba(0, 0, 0, 0.2);
+  --shadow-lg: rgba(0, 0, 0, 0.3);
 }
 
 [data-skill-theme="leetcode"] {
@@ -59,6 +118,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--app-bg);
   color: var(--text-main);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
 code {

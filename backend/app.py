@@ -857,28 +857,40 @@ async def _background_process_run(run_id: str, task: str, language: str, usernam
         db.update_run(run_id, {
             'status': 'generating',
             'progress': 'generating',
-            'status_message': '🔄 Generating all 2 solutions...'
+            'status_message': '� Initializing Multi-Agent System...'
+        })
+        await asyncio.sleep(0.5)
+        db.update_run(run_id, {
+            'status': 'generating',
+            'progress': 'brute_force',
+            'status_message': '🔍 Stage 1/2: Analyzing problem & generating brute force solution...'
         })
 
-        # Single prompt that generates 2 versions (Brute Force → Optimal)
+        # Single prompt that generates 2 versions (Brute Force → Optimal) with explanations
         combined_prompt = f"""{lang_directive}Task: {task}
 
-Generate TWO versions of the solution:
+Generate TWO versions of the solution with explanations:
 
 ### BRUTE FORCE ###
 Simple O(n²) or higher complexity solution. Focus on correctness over optimization.
+Explain: Brief explanation of the brute force approach, time complexity, and approach name.
 
 ### OPTIMAL ###
 Best possible solution with optimal time/space complexity using efficient algorithms and data structures.
+Explain: Brief explanation of the optimal approach, time/space complexity, and algorithm name.
 
-Output format:
-```brute
+Output format EXACTLY:
+---BRUTE START---
 [brute force code here]
-```
+---BRUTE EXPLAIN---
+[Brief explanation: Approach name, Time Complexity, Space Complexity, and 1 sentence about how it works]
+---BRUTE END---
 
-```optimal
+---OPTIMAL START---
 [optimal code here]
-```"""
+---OPTIMAL EXPLAIN---
+[Brief explanation: Approach name, Time Complexity, Space Complexity, and 1 sentence about how it works]
+---OPTIMAL END---"""
 
         timeout = int(os.getenv("GROQ_TIMEOUT", "60"))
         try:
@@ -886,28 +898,59 @@ Output format:
                 loop.run_in_executor(None, llm, combined_prompt),
                 timeout=timeout
             )
+            db.update_run(run_id, {
+                'status': 'generating',
+                'progress': 'optimal',
+                'status_message': '⚡ Stage 2/2: Optimizing solution with advanced algorithms...'
+            })
         except asyncio.TimeoutError:
             print(f"[BG] LLM timeout")
             response = ""
+            db.update_run(run_id, {
+                'status': 'generating',
+                'progress': 'timeout',
+                'status_message': '⏱️ LLM processing taking longer than expected...'
+            })
         except Exception as e:
             print(f"[BG] LLM error: {e}")
             response = ""
+            db.update_run(run_id, {
+                'status': 'generating',
+                'progress': 'error',
+                'status_message': '🔧 Encountered error, using fallback generation...'
+            })
 
-        # Parse the response into 2 parts
-        brute_code = optimal_code = ""
+        # Parse the response into 2 parts with explanations
+        brute_code = optimal_code = brute_explanation = optimal_explanation = ""
         
         if response and not _looks_like_llm_error(response):
             import re
             
-            # Extract brute force
-            brute_match = re.search(r'```brute\s*(.*?)```', response, re.DOTALL)
+            # Extract brute force code and explanation
+            brute_match = re.search(r'---BRUTE START---\s*(.*?)\s*---BRUTE EXPLAIN---\s*(.*?)\s*---BRUTE END---', response, re.DOTALL)
             if brute_match:
                 brute_code = brute_match.group(1).strip()
+                brute_explanation = brute_match.group(2).strip()
             
-            # Extract optimal
-            optimal_match = re.search(r'```optimal\s*(.*?)```', response, re.DOTALL)
+            # Extract optimal code and explanation
+            optimal_match = re.search(r'---OPTIMAL START---\s*(.*?)\s*---OPTIMAL EXPLAIN---\s*(.*?)\s*---OPTIMAL END---', response, re.DOTALL)
             if optimal_match:
                 optimal_code = optimal_match.group(1).strip()
+                optimal_explanation = optimal_match.group(2).strip()
+            
+            # Fallback: try to extract code blocks with old format
+            if not brute_code and not optimal_code:
+                brute_match = re.search(r'```brute\s*(.*?)```', response, re.DOTALL)
+                if brute_match:
+                    brute_code = brute_match.group(1).strip()
+                
+                optimal_match = re.search(r'```optimal\s*(.*?)```', response, re.DOTALL)
+                if optimal_match:
+                    optimal_code = optimal_match.group(1).strip()
+                
+                # Extract explanations if present
+                brute_explanation = "Brute force approach: Simple, straightforward solution prioritizing correctness."
+                optimal_explanation = "Optimal approach: Efficient solution using best algorithms and data structures."
             
             # Fallback: try to extract any code blocks
             if not brute_code and not optimal_code:
@@ -919,6 +962,9 @@ Output format:
                 else:
                     # Use entire response as code
                     brute_code = optimal_code = response
+                
+                brute_explanation = "Brute force approach: Simple, straightforward solution."
+                optimal_explanation = "Optimal approach: Efficient solution with best complexity."
 
         # If LLM failed completely, mark as failed and return early with helpful error message
         if not optimal_code or _looks_like_llm_error(optimal_code):
@@ -1091,11 +1137,11 @@ Output format:
 
         db.update_run(run_id, {
             'brute_code': brute_code,
-            'brute_explanation': 'Brute force: O(n²) simple approach prioritizing correctness.',
+            'brute_explanation': brute_explanation if brute_explanation else 'Brute force: O(n²) simple approach prioritizing correctness.',
             'optimal_code': optimal_code,
-            'optimal_explanation': 'Optimal: Best time and space complexity with efficient algorithms.',
+            'optimal_explanation': optimal_explanation if optimal_explanation else 'Optimal: Best time and space complexity with efficient algorithms.',
             'code': optimal_code,
-            'code_explanation': 'Optimal solution with best algorithm and complexity.',
+            'code_explanation': optimal_explanation if optimal_explanation else 'Optimal solution with best algorithm and complexity.',
             'initial_code': brute_code,
             'features': features,
             'monitor_data': monitor_data,
@@ -1103,7 +1149,7 @@ Output format:
             'initial_score': brute_score,
             'status': 'done',
             'progress': 'done',
-            'status_message': '✅ All stages complete!',
+            'status_message': '✨ Complete! Brute force & optimal solutions generated. Ready for analysis.',
             'auto_enhanced': True,
             'enhancement_loops': 2
         })
@@ -1162,7 +1208,11 @@ async def get_run(run_id: str, user = Depends(verify_token)):
 async def get_all_runs_admin():
     """Fetch all runs for admin analytics dashboard - no auth needed for demo"""
     import random
-    runs = db.get_all_runs()
+    try:
+        runs = db.get_all_runs()
+    except Exception as e:
+        print(f"[ERROR] Failed to fetch runs from database: {e}")
+        raise HTTPException(status_code=503, detail=f"Database unavailable: {str(e)}. Ensure MongoDB is running on localhost:27017")
     for run in runs:
         run["_id"] = str(run["_id"])
         # Populate agent_stats for runs that don't have them (legacy data)

@@ -138,7 +138,7 @@
 }
 
 .sidebar-title {
-  color: #aaa;
+  color: var(--text-softer);
   font-size: 0.85rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -162,15 +162,15 @@
   align-items: flex-start;
   gap: 0.75rem;
   padding: 0.85rem;
-  background: #2a2a2a;
-  border: 1px solid #333;
+  background: var(--surface);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .chat-item:hover {
-  background: #353535;
+  background: color-mix(in srgb, var(--surface) 120%, transparent);
   border-color: var(--accent);
   transform: translateX(4px);
 }
@@ -193,7 +193,7 @@
 }
 
 .chat-title {
-  color: #e5e5e5;
+  color: var(--text-main);
   font-size: 0.9rem;
   font-weight: 500;
   overflow: hidden;
@@ -209,7 +209,7 @@
 }
 
 .chat-score {
-  color: #aaa;
+  color: var(--text-softer);
   font-size: 0.8rem;
 }
 
@@ -229,16 +229,16 @@
 }
 
 .sidebar-content::-webkit-scrollbar-track {
-  background: #1e1e1e;
+  background: var(--surface);
 }
 
 .sidebar-content::-webkit-scrollbar-thumb {
-  background: #444;
+  background: var(--border-color);
   border-radius: 10px;
 }
 
 .sidebar-content::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: var(--text-softer);
 }
 
 /* Old dropdown styles (no longer used) */
